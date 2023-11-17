@@ -20,15 +20,6 @@ SHOW FULL COLUMNS FROM author;
 
 -- 테이블 생성문 조회
 SHOW CREATE TABLE posts;
--- CREATE TABLE `posts` (
---    `id` int(11) NOT NULL,
---    `title` varchar(255) DEFAULT NULL,
---    `content` varchar(255) DEFAULT NULL,
---    `author_id` int(11) DEFAULT NULL,
---    PRIMARY KEY (`id`),
---    KEY `author_id` (`author_id`),
---    CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`)
---  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 
 -- 테이블 제약조건 조회
 SELECT * FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
@@ -39,8 +30,8 @@ SHOW INDEX FROM posts;
 
 -- ALTER
 -- 테이블 이름 변경
- ALTER TAMLE 테이블명 RENAME=ME 새로운 테이블명;
-  ALTER TAMLE 테이블명 posts RENAME post;
+ ALTER TAbLE 테이블명 RENAME=ME 새로운 테이블명;
+  ALTER TAbLE 테이블명 posts RENAME post;
 -- 칼럼 추가(add)
 ALTER TABLE 테이블명 ADD COLUMN 컬럼명 자료형 [NULL 또는 NOTNULL]
 ALTER TABLE author ADD COLUMN role VARCHAR(50);
