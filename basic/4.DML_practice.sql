@@ -78,3 +78,30 @@ select *from author where id not in(1, 2, 4);
 select *from post where id BETWEEN 2 and 4;
 select *from post where id 2 and 3 and 4;
 select *from post where not (id<2 or id>4);
+
+select * from post where (created_time, %Y-m%-%d) 
+= date_format(now(), %Y-m%-%d);
+
+SELECT * FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE where table_name ='post';
+alter table post drop foreign key post_ibfk_1;
+alter table post drop index author_id;
+alter table post add constraint post_author_fk foreign key(author_id)
+references author(id) on update cascade;
+
+select * from author;
+alter table post drop foreign key post_author_fk;
+show index from post;
+alter table post drop index post_author_fk;
+alter table post add constraint post_author_fk foreign key(author_id)
+references author(id) on update set null on delete set null;
+update author set id=50 where id=5;
+
+select id, title, content,
+case author_id
+when 1 then 'First Author'
+when 2 then 'Second Author'
+ELSE 'Others'
+end
+as author_type from post;
+
+select id, title, content, if(author_id=1, 'first author', 'others') as author_type from post ;

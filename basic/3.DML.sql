@@ -166,3 +166,137 @@ select name, email from author as a;
 -- 가장많이사용
 -- DATE_FORMAT(date, format)
 -- ex)SELECT DATE_FORMAT('2020-01-01 17:12:00', '%Y-%m-%d'); => 2020-01-01
+
+-- 타입변환
+-- CAST, CONVERT 사용시 유의사항
+-- 최신버전
+-- CAST('123' as INT)방식으로 int 사용 가능
+-- CAST('123' as signed)방식으로 signed(또는 unsigned) 사용 가능
+-- 구버전
+-- CAST('123' as signed)방식으로 signed(또는 unsigned)만 사용 가능
+-- 여기서 signed는 부호있는 정수. 즉 음수/양수 모두 포함
+-- unsigned는 부호 없는 정수로서 0이상 양수를 포함
+
+-- 특정날짜, 기간조회
+-- 날짜데이터 조회하는 방식중 많이 사용하는방식
+-- DATE_FORMAT(date, format)을 활용한 조회
+-- Y mm dd H i s 
+-- LIKE 를 상요하여 문자열 형식으로 조회
+-- SELECT * FROM post where created_time like '2023-11-23%'
+-- BETWEEN 연산자
+-- 특정날짜 범위를 지정하여 데이터를 검색
+-- WHERE created_time BETWEEN '2021-01-01' AND '2023-11-17'
+-- 날짜비교연산자
+-- WHERE created_time >= '2021-01-01' AND created_time <= '2023-11-17'
+-- 오늘날짜 관련 함수
+-- now()
+-- 제약조건
+-- 데이터를 입력받을 때 실행되는검사 규칙
+-- CREATE 문으로 테이블을 생성 또는 ALTER 문으로 필드를 추가할 때 설정
+-- 종류
+-- NOT NULL
+-- PRIMARY KEY -> NOT NULL, UNIQUE, 한테이블당 1개
+-- FOREIGN KEYUNIQUE -> 한테이블에 여러개 설정가능
+
+-- AUTO_INCREMENT 키워드와 함께
+-- 새로운 레코드가 추가될 때마다 1씩 증가된 값을 저장
+-- author, post 테이블의 id auto_increment로 바꿔보자
+-- ALTER TABLE author MODIFY COLUMN id int auto_increment
+
+-- 제약조건 - UNIQUE
+-- CREATE TABLE 테이블 이름
+-- (필드이름 필드타입, ...,[CONSTRAINT 제약조건이름] UNIQUE (필드이름))
+-- UNIQUE 제약 조건을 별도로 정의하며, 선택적으로 제약조건에 이름을 부여하는 방법
+
+-- UNIQUE 제약 조건을 설정하면, 해당 필드는 자동으로 인덱스(INDEX)로 설정
+-- SHOW INDEX FROM 테이블명;
+-- INDEX삭제 : ALTER TABLE 테이블이름 DROP INDEX 인덱스명;
+-- 제약조건 삭제시 index 삭제, index 삭제시 제약조건 삭제
+
+-- alter table 테이블이름 modify column 필드이름 필드타입 UNIQUE
+-- alter table 테이블 이름 add constraint 제약조건 이름 unique(필드이름)
+-- 제약조건 제거 : index를 삭제하면 같이 삭제됨.
+-- 제약조건 목록조회(SELECT * FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE)
+-- alter table 테이블명 drop unique 제약조건이름;
+-- alter table author drop constraint email;
+-- alter table 테이블명 drop unique 제약조건이름;
+-- alter table author drop foreign key email;
+
+-- 제약조건 -primary KEY
+-- primary KEY 제약조건을 가진  칼럼을 기본키(pk)라함
+-- not null과 unigue 제약 조건의 특징을 모두 가진다
+
+-- primary key는 테이블당 오직 하나의 필드에만 설정
+-- unique는 한테이블의 여러 필드에 설정 가능
+-- not null도 물론 여러 필드에 설정 가능
+
+-- 제약조건 - foreign key
+-- 외래키라고 부르며 한테이블은 다른 테이블과 연결해주는 역할
+-- 기준이 되는 다른 테이블의 내용을 참조해서 레코드가 입력
+-- 하나의 테이블을 다른 테이블에 의존하게 만드는 것
+-- 다른 테이블의 필드는 반드시 unigue나 primary key 제약 조건이어야함
+-- 문법
+-- create table 테이블이름
+
+-- 참조되는 테이블에서 데이터의 수정이나 삭제가 발생시 영향
+-- on delete
+-- on update
+-- 기본값은 delete, update 모두 restrict 옵션이 걸려 있으므로, 변경하고 싶다면 각각 지정필요
+
+-- 위설정시 동작옵션
+-- cascade
+-- 참조되는 테이블에서 데이터를 삭제/수정하면 같이 삭제/수정
+-- set null
+-- 참조되는 테이블에서 데이터를 삭제/수정하면 데이터는 null로 변경
+-- restrict
+-- fk로 잡은 테이블의 데이터가 남아 있으면, fk대상 데이터 수정/삭제 불가
+-- 동작옵션을 주지 않으면 기본은 restrict
+-- 제약조건 on update cascade
+-- 외래키 제약조건에서 on update cascade등의 옵션
+
+-- post 테이블에 on update cascade 설정
+-- 먼저, 기존의 foreign key 제약조건을 조회 후 삭제
+-- SELECT * FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE where table name = 'post';
+-- alter table post drop foreign key post_ibfk_1;
+-- alter table post drop index author_id;
+-- 새롭게 제약조건 추가
+-- alter table post add constraint post_author_fk foreign key(author_id)
+-- references author(id) on update cascade;
+-- set null 추가
+-- on update set null on delete set null; 
+
+-- 제약조건 - default
+-- 데이터를 입력할 때 해당 필드 값을 전달하지 않으면, 자동으로 설정된 기본값을 저장
+-- 문법
+-- CREATE TABLE test
+-- (in int, name varchar(30) default 'anonymous')
+-- 시간 세팅시 가장 많이 사용
+
+-- 흐름제어
+-- CASE 자바 switch랑 비슷
+-- CASE values
+-- WHEN [compare_value] THEN result
+-- WHEN [compare_value] THEN result...
+-- ELSE result
+-- END
+-- CASE와 END로 이루어져 있고, 원하는 조건내에 존재하지 않으면 ELSE문을 타고, ELSE문이 없을 경우
+-- null을 return
+-- select id, title, content,
+-- case author_id
+-- when 1 then 'First Author'
+-- when 2 then 'Second Author'
+-- ELSE 'Others'
+-- end
+-- as author_type from post;
+
+-- 흐름제어
+-- IF()
+-- IF(a, b, c)
+-- a는 조건 b는 참일경우 반환값, c는 거짓일 경우 반환값
+-- 만약 a조건이 참이면 b를 반환하고, 거짓이면 c를 반환합니다,
+-- select if(0<1, 'yes','no');
+
+-- ifnull(a, b)
+-- 만약 a의 값이 null이 아니면 a 그자체를 반환하고 null이면 b를 반환
+
+-- select id, title, content, if(author_id=1, 'first author', 'others') as author_type from post ;
