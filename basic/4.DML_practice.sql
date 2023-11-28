@@ -105,3 +105,81 @@ end
 as author_type from post;
 
 select id, title, content, if(author_id=1, 'first author', 'others') as author_type from post ;
+
+select * from tableA INNER JOIN tableB ON tableA = tableB.A_id
+select * from tableA AS a INNER JOIN tableB as b on a.id =b.a_id;
+select * from author INNER JOIN post ON author.id = post.author_id;
+select * from author AS a INNER JOIN post as b on a.id =b.author_id;
+LEFT OUTER JOIN
+SELECT * FROM tableA a LEFT JOIN tableB b ON a.id = b.a_id
+
+select name, title from author as a inner join post as p on a.id = p.author_id;
+SELECT name, title FROM author a LEFT JOIN post p ON a.id = p.author_id;
+SELECT name, title FROM author a LEFT JOIN post p ON a.id = p.author_id
+where age >=25;
+
+SELECT 컬럼1, 컬럼2 FROM TABLE1 UNION SELET 컬럼1, 컬럼2 FROM TABLE2;
+SELECT NAME, EMAIL FROM AUTHOR UNION SELECT TITLE, contents 
+
+select round(avg(price), 0) as '평균가격' from post;
+select author_id count(*) from post;
+
+select author_id, round(avg(price), 0) from post where price >=2000 group by author_id;
+select author_id, round(avg(price), 0) from post group by author_id having avg(price) >=2000;
+
+DELIMITER //
+CREATE PROCEDURE procedure_name (parameters)
+BEGIN
+-- SQL 문법
+END //
+DELIMITER ;
+-- 호출시
+CALL 프로시저명();
+
+getUser(IN userld int)
+where id = userld
+
+DECLARE 변수명 변수타입 [DEFAULT DEFAULT_VALUE];
+SET 변수명 = 수정할값;
+IF 조건식 THEN
+-- 조건이 참일때
+ELSE 
+-- 조건이 거짓일때
+END IF
+WHILE문
+WHILE 조건식 DO
+END WHILE;
+
+mysqldump -u root -p --default-character-set=utf8mb4 board > dumpfile.sql
+
+-- 스키마 추가 및 변경
+-- author 테이블을 나누어 author_address 테이블 추가기능
+-- country.state_city, details, zip_code, phonenumber
+-- on delete cascade 옵션
+-- 1:1 관계 설정
+
+-- 필요산출물
+-- ER다이어그램을 통해 추상화
+-- 릴레이셔널 스키마를 통해 구체화
+-- 테이블 생성문(DDL)
+-- 테스트 케이스
+
+-- 스키마 설계
+    -- 주문관리 서비스 설계
+    -- 요구사항
+        -- 모든테이블 컬럼 자유 설계
+        -- ORDERSYSTEM 데이터베이스 생성
+        -- 해당 서비스에서는 회원가입이 가능
+        -- MEMEBERS
+        -- 회원의 종류가 user, admin, seller로 구성
+        -- 회원이 상품과 재고수량을 동록
+        -- ITEMS
+        -- 상품명, 상품가격, 재고
+        -- 누가 등록했는지에 대한 정보가 남아야 함에 유의
+        -- 회원이 여러 상품을 한꺼번에 주문 가능
+        -- ORDER, ORDER_DETAILS
+
+-- 필요산출물
+    -- ER다이어그램을 통해 추상화
+    -- 릴레이셔널 스키마를 통해 구체화
+    -- 테이블 생성문(DDL)

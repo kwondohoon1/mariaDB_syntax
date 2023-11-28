@@ -300,3 +300,37 @@ select name, email from author as a;
 -- 만약 a의 값이 null이 아니면 a 그자체를 반환하고 null이면 b를 반환
 
 -- select id, title, content, if(author_id=1, 'first author', 'others') as author_type from post ;
+
+-- view
+
+--  뷰(view)는 데이터베이스의 테이브로가 유사한 구조를 가지지만, 가상의 테이블로서 실제 데이터를 
+--  저장하지 않는 데이터 베이스, 실제 데이터베이스를  참조만 문법
+--  CREATE view 뷰네임 as
+--  SELECT 컬럼1, 컬럼2
+--  FROM 테이블명;
+
+--  GRANT SELECT ON 데이터베이스이름, 뷰이름 TO 'testuser'@'localhost'
+
+-- string 관련
+키에 값을 설정
+set key values키의값을 가져옴
+get keysetit not EXISTSset key value nx
+
+최초접속시 
+
+
+zset(정렬된 집합)
+주식 코인 등의 실시간 시세 또는 게임등의 사용자의 점수나 순위를 관리하는데 사용
+기본문법
+ZADD key score MEMEBERS
+score 멤버를 정렬하는데 사용되는 점수
+member형식을 json형식으로도 가능
+ex)zadd my_key 1 {"hello","world"}
+zrem key member
+특정키의 특정멤버 삭제
+zrank key member
+특정멤버의 위치 정보 반환
+zrange stock_prices 0 -1
+score기준 오름차순 조회
+zrevrange stock_prices 0 -1
+score기준 내림차순 조회
